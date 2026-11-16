@@ -4,3 +4,64 @@ output: github_document
 date: "2026-11-16"
 ---
 
+```{r}
+library(tidyverse)
+set.seed(1)
+```
+
+# Question 1
+```{r}
+bday_sim = function(n) {
+  birthdays = sample(1:365, size = n, replace = T)
+  if (n_distinct(birthdays) < n) {
+    T
+  } else {
+    F
+  }
+}
+bday_sim(2)
+bday_sim(50)
+```
+
+```{r}
+sim_results_df =
+  expand_grid(
+    group_size = 2:50,
+    iter = 1:10000
+  ) |>
+  mutate(
+    shared_bday = map(group_size, bday_sim)
+  ) |>
+  unnest(shared_bday)
+
+head(sim_results_df)
+```
+
+```{r}
+sim_summary = 
+  sim_results_df |> 
+  group_by(group_size) |> 
+  summarize(prob_shared = mean(shared_bday))
+
+head(sim_summary)
+```
+
+```{r}
+sim_summary |> 
+  ggplot(aes(group_size, prob_shared)) +
+  geom_point() +
+  labs(title = "Probability of Shared Birthday by Group Size",
+       x = "group size",
+       y = "probability")
+```
+The probability intitially near 0, but rises quickly at first as the group size increases. it levels off near 1 as the group size increases and passes 50% at just under 25 people. 
+
+# Question 2
+
+
+
+
+
+
+
+
