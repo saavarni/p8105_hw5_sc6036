@@ -105,8 +105,27 @@ tidy_df |>
 ```
 The control arm shows no trends, but the experimental arm seems to have an upwards trend with the lines between 3.5 and 7 by week 8.
 
-## Question 
+## Question 3
 
+```{r}
+sim_t_test = function(mu, n = 30, sigma = 5) {
+  x = rnorm(n, mean = mu, sd = sigma)
+  t.test(x, mu = 0) |> 
+    broom::tidy() |> 
+    select(mu_hat = estimate, p_value = p.value)
+}
+```
 
+```{r}
+sim_results_df = 
+  expand_grid(
+    true_mu = 0.6,
+    iter = 1:5000
+  ) |> 
+  mutate(
+    estimate_df = map(true_mu, sim_t_test)
+  ) |> 
+  unnest(estimate_df)
+```
 
 
