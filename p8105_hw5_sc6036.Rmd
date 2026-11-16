@@ -183,7 +183,8 @@ avg_reject_df |>
   theme_classic()
 ```
 
-
+At mu = 0, the null is true so the power is the false rejection rate. As mu grows, the power rises slowly at first, and then quickly approaches 1 as mu increases. Larger effect size means higher power. 
+The average estimate is close to the true mu for each value because of unbiasedness. With a small mu, the power is low so the average will give a number above the truth. A large mu gives an average close to the rruth, and the rejected samples are almost all of the samples. With mu = 0, the rejected samples are large positive and large negative estimates, and the average is near 0. This is due to low power leading to overestimates on effects
 
 
 
