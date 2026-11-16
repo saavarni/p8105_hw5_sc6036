@@ -119,7 +119,7 @@ sim_t_test = function(mu, n = 30, sigma = 5) {
 ```{r}
 sim_results_df = 
   expand_grid(
-    true_mu = 0.6,
+    true_mu = 0:6,
     iter = 1:5000
   ) |> 
   mutate(
@@ -127,5 +127,68 @@ sim_results_df =
   ) |> 
   unnest(estimate_df)
 ```
+
+
+```{r}
+power_df =
+  sim_results_df |>
+  mutate(reject = p_value < 0.05) |>
+  group_by(true_mu) |>
+  summarise(power = mean(reject))
+
+power_df |>
+  ggplot(aes(x = true_mu, y = power)) +
+  geom_point() +
+  geom_line() +
+  labs(
+    title = "Power of T test",
+    x = "True value mu",
+    y = "Power"
+  ) +
+  theme_classic()
+```
+
+```{r}
+avg_all_df = 
+  sim_results_df |> 
+  group_by(true_mu) |> 
+  summarise(avg_mu_hat = mean(mu_hat))
+
+avg_reject_df = 
+  sim_results_df |> 
+  filter(p_value < 0.05) |> 
+  group_by(true_mu) |> 
+  summarise(avg_mu_hat = mean(mu_hat))
+```
+
+```{r}
+avg_all_df |>
+  ggplot(aes(x = true_mu, y = avg_mu_hat)) +
+  geom_point() +
+  geom_line() +
+  labs(title = "Average Mu Estimate by all Samples",
+       x = "true mu",
+       y = "average estimate mu"
+  ) +
+  theme_classic()
+
+avg_reject_df |>
+  ggplot(aes(x = true_mu, y = avg_mu_hat)) +
+  geom_point() +
+  geom_line() +
+  labs(title = "Average Mu Estimate by Null Rejected",
+       x = "true mu",
+       y = "average estimate mu"
+  ) +
+  theme_classic()
+```
+
+
+
+
+
+
+
+
 
 
