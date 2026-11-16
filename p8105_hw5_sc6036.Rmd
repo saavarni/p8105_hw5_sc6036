@@ -52,12 +52,23 @@ sim_summary |>
   geom_point() +
   labs(title = "Probability of Shared Birthday by Group Size",
        x = "group size",
-       y = "probability")
+       y = "probability") +
+  theme_classic()
 ```
 The probability intitially near 0, but rises quickly at first as the group size increases. it levels off near 1 as the group size increases and passes 50% at just under 25 people. 
 
 # Question 2
+```{r}
+all_df = 
+  tibble(files = list.files("data/"),
+         path = str_c("data/", files)
+  )
 
+all_df =
+  all_df |>
+  mutate(data = map(path, read_csv)) |>
+  unnest(cols = "data")
+```
 
 
 
